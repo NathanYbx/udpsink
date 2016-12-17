@@ -26,11 +26,11 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-      <dependency>
-          <groupId>org.apache.hadoop.metrics2.sink.udpsink</groupId>
-          <artifactId>hadoop-metrics-udpsink</artifactId>
-          <version>1.0-SNAPSHOT</version>
-      </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop.metrics2.sink.udpsink</groupId>
+      <artifactId>hadoop-metrics-udpsink</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>hadoop-metrics-udpsink</finalName>

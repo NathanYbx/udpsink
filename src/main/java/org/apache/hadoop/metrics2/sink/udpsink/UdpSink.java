@@ -6,16 +6,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
-import org.apache.hadoop.metrics2.AbstractMetric;
-import org.apache.hadoop.metrics2.MetricsRecord;
-import org.apache.hadoop.metrics2.MetricsSink;
-import org.apache.hadoop.metrics2.MetricsTag;
+import org.apache.hadoop.metrics2.*;
 import org.apache.hadoop.net.DNS;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import java.io.Closeable;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 
 /**
@@ -32,8 +28,11 @@ public class UdpSink implements MetricsSink, Closeable {
     private int udpPort ;
     private String hostName ;
 
-    public void close() throws IOException {
+    private static final String FILENAME_KEY = "filename";
+    private PrintStream writer;
 
+    public void close() throws IOException {
+        writer.close();
     }
 
     public void putMetrics(MetricsRecord metricsRecord) {
@@ -57,19 +56,29 @@ public class UdpSink implements MetricsSink, Closeable {
             jsonObj.put("tag",tagObj);
             jsonObj.put("metrics",valueObj);
 
-            sendUdp(jsonObj.toString());
+
+            writer.print(jsonObj.toString());
+            //sendUdp(jsonObj.toString());
         } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void flush() {
-
+        writer.flush();
     }
 
     public void init(SubsetConfiguration subsetConfiguration) {
+
+        String filename = conf.getString(FILENAME_KEY);
+        try {
+            writer = (filename == null) ? System.out
+                    : new PrintStream(new FileOutputStream(new File(filename)),
+                    true, "UTF-8");
+        } catch (Exception e) {
+            throw new MetricsException("Error creating "+ filename, e);
+        }
+
         LOG.info("udpsink");
         this.conf = subsetConfiguration ;
 
