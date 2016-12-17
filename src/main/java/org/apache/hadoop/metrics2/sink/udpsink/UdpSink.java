@@ -40,28 +40,29 @@ public class UdpSink implements MetricsSink, Closeable {
 //
 //        }
 
-        JSONObject jsonObj = new JSONObject();
-        JSONObject tagObj  = new JSONObject();
-        JSONObject valueObj = new JSONObject();
-        try {
-            jsonObj.put("time",String.valueOf(metricsRecord.timestamp()));
-            jsonObj.put("name",metricsRecord.name());
-            jsonObj.put("hostname",getHostName());
-            for (MetricsTag tag : metricsRecord.tags()) {
-                tagObj.put(tag.name(),tag.value());
-            }
-            for (AbstractMetric metric : metricsRecord.metrics()) {
-                valueObj.put(metric.name(),metric.value());
-            }
-            jsonObj.put("tag",tagObj);
-            jsonObj.put("metrics",valueObj);
-
-
-            writer.print(jsonObj.toString());
-            //sendUdp(jsonObj.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        JSONObject jsonObj = new JSONObject();
+//        JSONObject tagObj  = new JSONObject();
+//        JSONObject valueObj = new JSONObject();
+//        try {
+//            jsonObj.put("time",String.valueOf(metricsRecord.timestamp()));
+//            jsonObj.put("name",metricsRecord.name());
+//            jsonObj.put("hostname",getHostName());
+//            for (MetricsTag tag : metricsRecord.tags()) {
+//                tagObj.put(tag.name(),tag.value());
+//            }
+//            for (AbstractMetric metric : metricsRecord.metrics()) {
+//                valueObj.put(metric.name(),metric.value());
+//            }
+//            jsonObj.put("tag",tagObj);
+//            jsonObj.put("metrics",valueObj);
+//
+//
+//            writer.print(jsonObj.toString());
+//            //sendUdp(jsonObj.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        writer.print(this.clusterName);
     }
 
     public void flush() {
@@ -108,7 +109,7 @@ public class UdpSink implements MetricsSink, Closeable {
     }
 
     public String getHostName() {
-        return hostName;
+        return this.hostName;
     }
 
     private void sendUdp(String msg) throws IOException {
