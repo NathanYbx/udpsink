@@ -30,11 +30,11 @@ public class UdpSink implements MetricsSink, Closeable {
 
     private static final String FILENAME_KEY = "filename";
     private PrintStream writer;
-
+    @Override
     public void close() throws IOException {
         writer.close();
     }
-
+    @Override
     public void putMetrics(MetricsRecord metricsRecord) {
 //        for (MetricsTag tags : metricsRecord.tags()){
 //
@@ -64,13 +64,13 @@ public class UdpSink implements MetricsSink, Closeable {
 //        }
         writer.print(this.clusterName);
     }
-
+    @Override
     public void flush() {
         writer.flush();
     }
-
+    @Override
     public void init(SubsetConfiguration subsetConfiguration) {
-
+        System.out.println("hello sink");
         String filename = conf.getString(FILENAME_KEY);
         try {
             writer = (filename == null) ? System.out
