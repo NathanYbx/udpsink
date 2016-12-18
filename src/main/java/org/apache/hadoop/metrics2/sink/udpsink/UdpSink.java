@@ -122,10 +122,24 @@ public class UdpSink implements MetricsSink, Closeable {
     private static final Log LOG = LogFactory.getLog(UdpSink.class);
     private static final String FILENAME_KEY = "filename";
     private PrintStream writer;
+    private String hostName ;
 
     @Override
     public void init(SubsetConfiguration conf) {
         LOG.info("Hello ALPS MONITOR");
+        hostName = "ALPS_DEFAULT_HOST";
+        if (conf.getString("slave.host.name") != null) {
+            hostName = conf.getString("slave.host.name");
+        } else {
+            try {
+                hostName = DNS.getDefaultHost(
+                        conf.getString("dfs.datanode.dns.interface", "default"),
+                        conf.getString("dfs.datanode.dns.nameserver", "default"));
+            } catch (UnknownHostException uhe) {
+                LOG.error(uhe);
+                hostName = "UNKNOWN.example.com";
+            }
+        }
         String filename = conf.getString(FILENAME_KEY);
         try {
             writer = filename == null ? System.out
@@ -139,26 +153,45 @@ public class UdpSink implements MetricsSink, Closeable {
     @Override
     public void putMetrics(MetricsRecord record) {
         LOG.info("Hello ALPS MONITOR" + String.valueOf(record.timestamp()));
-        writer.print(record.timestamp());
-        writer.print(" ");
-        writer.print(record.context());
-        writer.print(".");
-        writer.print(record.name());
-        String separator = ": ";
-        for (MetricsTag tag : record.tags()) {
-            writer.print(separator);
-            separator = ", ";
-            writer.print(tag.name());
-            writer.print("=");
-            writer.print(tag.value());
+        JSONObject jsonObj = new JSONObject();
+        JSONObject tagObj  = new JSONObject();
+        JSONObject valueObj = new JSONObject();
+        try {
+            jsonObj.put("time", String.valueOf(record.timestamp()));
+            jsonObj.put("name", record.name());
+            jsonObj.put("hostname", hostName);
+            for (MetricsTag tag : record.tags()) {
+                tagObj.put(tag.name(), tag.value());
+            }
+            for (AbstractMetric metric : record.metrics()) {
+                valueObj.put(metric.name(), metric.value());
+            }
+            jsonObj.put("tag", tagObj);
+            jsonObj.put("metrics", valueObj);
+        }catch (Exception e){
+            LOG.error(e.getMessage());
         }
-        for (AbstractMetric metric : record.metrics()) {
-            writer.print(separator);
-            separator = ", ";
-            writer.print(metric.name());
-            writer.print("=");
-            writer.print(metric.value());
-        }
+//        writer.print(record.timestamp());
+//        writer.print(" ");
+//        writer.print(record.context());
+//        writer.print(".");
+//        writer.print(record.name());
+//        String separator = ": ";
+//        for (MetricsTag tag : record.tags()) {
+//            writer.print(separator);
+//            separator = ", ";
+//            writer.print(tag.name());
+//            writer.print("=");
+//            writer.print(tag.value());
+//        }
+//        for (AbstractMetric metric : record.metrics()) {
+//            writer.print(separator);
+//            separator = ", ";
+//            writer.print(metric.name());
+//            writer.print("=");
+//            writer.print(metric.value());
+//        }
+        writer.print(jsonObj.toString());
         writer.println();
     }
 
