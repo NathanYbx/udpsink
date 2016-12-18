@@ -119,12 +119,13 @@ public class UdpSink implements MetricsSink, Closeable {
 //        ds.send(dp);
 //        ds.close();
 //    }
-
+    private static final Log LOG = LogFactory.getLog(UdpSink.class);
     private static final String FILENAME_KEY = "filename";
     private PrintStream writer;
 
     @Override
     public void init(SubsetConfiguration conf) {
+        LOG.info("Hello ALPS MONITOR");
         String filename = conf.getString(FILENAME_KEY);
         try {
             writer = filename == null ? System.out
@@ -137,6 +138,7 @@ public class UdpSink implements MetricsSink, Closeable {
 
     @Override
     public void putMetrics(MetricsRecord record) {
+        LOG.info("Hello ALPS MONITOR" + String.valueOf(record.timestamp()));
         writer.print(record.timestamp());
         writer.print(" ");
         writer.print(record.context());
