@@ -1,0 +1,78 @@
+package alps_Hadoop.demo;
+
+import org.apache.thrift.TException;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.transport.TFramedTransport;
+import org.apache.thrift.transport.TSocket;
+import org.apache.thrift.transport.TTransport;
+import org.apache.thrift.transport.TTransportException;
+import org.omg.PortableServer.THREAD_POLICY_ID;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Created by yubangxu on 2016/12/19.
+ */
+public class ThriftClient {
+
+    private TTransport transport;
+    private hmetricsThrift.Client client;
+    private static String ip = "localhost";
+    private static int port = 10020;
+
+    public static class ThriftClientHandle {
+        private static ThriftClient instance = new ThriftClient(ip,port);
+    }
+
+    private ThriftClient(String ip, int port){
+        try {
+            transport = new TFramedTransport(new TSocket(ip, port));
+
+            TBinaryProtocol protocol = new TBinaryProtocol(transport);
+            //TCompactProtocol protocol = new TCompactProtocol(transport);
+
+            client = new hmetricsThrift.Client(protocol);
+            transport.open();
+
+//            Map<String, String> param = new HashMap<String, String>();
+//            param.put("name", "qinerg");
+//            param.put("passwd", "123456");
+//
+//            for (int i = 0; i < 1000; i++) {
+//                System.out.println(client.funCall(System.currentTimeMillis() , "login", param));
+//            }
+
+//            transport.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void Write(HMetrics hMetrics) throws TException {
+        if (transport.isOpen()) {
+            client.put(hMetrics);
+        }else{
+            //ThriftClientHandle.instance = new ThriftClient(ThriftClientHandle.ip,ThriftClientHandle.port);
+
+        }
+    }
+
+    public void Flush() throws TTransportException {
+        transport.flush();
+    }
+
+    public void Close() {
+        transport.close();
+    }
+
+    public static ThriftClient getInstance(String sip,int sport) {
+        //其实这里写的非常不好
+        ip = sip ;
+        port = sport;
+        if (ThriftClientHandle.instance.transport.isOpen()) {
+            ThriftClientHandle.instance = new ThriftClient(ip,port);
+        }
+        return ThriftClientHandle.instance;
+    }
+}
