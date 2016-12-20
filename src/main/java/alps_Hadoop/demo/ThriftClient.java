@@ -1,5 +1,8 @@
 package alps_Hadoop.demo;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.metrics2.sink.udpsink.UdpSink;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.transport.TFramedTransport;
@@ -15,7 +18,7 @@ import java.util.Map;
  * Created by yubangxu on 2016/12/19.
  */
 public class ThriftClient {
-
+    private static final Log LOG = LogFactory.getLog(ThriftClient.class);
     private TTransport transport;
     private hmetricsThrift.Client client;
     private TBinaryProtocol protocol;
@@ -54,8 +57,12 @@ public class ThriftClient {
     }
 
     public void Write(HMetrics hMetrics) throws TException {
-        System.out.println(client);
-        client.put(hMetrics);
+        if (client != null) {
+            System.out.println(client);
+            client.put(hMetrics);
+        }else{
+            LOG.info("Client is Null");
+        }
     }
 
     public void Flush() throws TTransportException {
