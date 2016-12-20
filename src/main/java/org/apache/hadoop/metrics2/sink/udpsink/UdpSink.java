@@ -2,6 +2,7 @@ package org.apache.hadoop.metrics2.sink.udpsink;
 
 import alps_Hadoop.demo.HMetrics;
 import alps_Hadoop.demo.ThriftClient;
+import alps_Hadoop.demo.hmetricsThrift;
 import org.apache.avro.data.Json;
 import org.apache.commons.configuration.SubsetConfiguration;
 import org.apache.commons.logging.Log;
@@ -11,6 +12,10 @@ import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.metrics2.*;
 import org.apache.hadoop.net.DNS;
 import org.apache.thrift.TException;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.transport.TFramedTransport;
+import org.apache.thrift.transport.TSocket;
+import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -34,6 +39,10 @@ public class UdpSink implements MetricsSink, Closeable {
     private SubsetConfiguration configuration;
     private String hostName ;
 
+    private TTransport transport;
+    private hmetricsThrift.Client client;
+    private TBinaryProtocol protocol;
+
     @Override
     public void init(SubsetConfiguration conf) {
         LOG.info("Hello ALPS Thrift MONITOR");
@@ -55,37 +64,26 @@ public class UdpSink implements MetricsSink, Closeable {
 //            writer = filename == null ? System.out
 //                    : new PrintStream(new FileOutputStream(new File(filename)),
 //                    true, "UTF-8");
-            configuration = conf;
+            //configuration = conf;
+            String ip = configuration.getString("ipaddr");
+            int port = configuration.getInt("port");
+            connection(ip,port);
         } catch (Exception e) {
             throw new MetricsException("Error creating "+ filename, e);
         }
+    }
+
+    private void connection(String ip,int port) throws TTransportException {
+        transport = new TFramedTransport(new TSocket(ip, port));
+        protocol = new TBinaryProtocol(transport);
+        client = new hmetricsThrift.Client(protocol);
+        transport.open();
     }
 
     @Override
     public void putMetrics(MetricsRecord record) {
 
         LOG.info("Hello ALPS MONITOR" + String.valueOf(record.timestamp()));
-//        JSONObject jsonObj = new JSONObject();
-//        JSONObject tagObj  = new JSONObject();
-//        JSONObject valueObj = new JSONObject();
-//        try {
-//            jsonObj.put("time", String.valueOf(record.timestamp()));
-//            jsonObj.put("name", record.name());
-//            jsonObj.put("hostname", hostName);
-//            for (MetricsTag tag : record.tags()) {
-//                tagObj.put(tag.name(), tag.value());
-//            }
-//            for (AbstractMetric metric : record.metrics()) {
-//                valueObj.put(metric.name(), metric.value());
-//            }
-//            jsonObj.put("tag", tagObj);
-//            jsonObj.put("metrics", valueObj);
-//        }catch (Exception e){
-//            LOG.error(e.getMessage());
-//        }
-//        writer.print(jsonObj.toString());
-//        writer.println();
-
         HMetrics hMetrics = new HMetrics();
         hMetrics.setTime((int)(record.timestamp()));
         hMetrics.setHostname(hostName);
@@ -101,22 +99,7 @@ public class UdpSink implements MetricsSink, Closeable {
         }
         hMetrics.setMetrics(metricsMap);
         try {
-            LOG.info(hMetrics.toString());
-            if(hMetrics !=null) {
-                String ip = configuration.getString("ipaddr");
-                int port = configuration.getInt("port");
-                LOG.info("Hello ALPS MONITOR 8888888888888888" + ip + "===" + port);
-                ThriftClient thriftClient = ThriftClient.getInstance(ip,port);
-                LOG.info(thriftClient.toString());
-                if (thriftClient != null ) {
-
-                    thriftClient.Write(hMetrics);
-                }else {
-                    LOG.info(thriftClient);
-                }
-            }else {
-                LOG.info("hmetrics is null");
-            }
+            client.put(hMetrics);
         } catch (TException e) {
             e.printStackTrace();
         }
