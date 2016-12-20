@@ -121,8 +121,8 @@ public class UdpSink implements MetricsSink, Closeable {
 
         try {
             LOG.debug(getClient(record.name()));
-            getClient(record.name());
-        } catch (TTransportException e) {
+            getClient(record.name()).put(hMetrics);
+        } catch (TException e) {
             e.printStackTrace();
         }
 //        try {
