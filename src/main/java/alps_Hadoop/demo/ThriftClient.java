@@ -25,9 +25,9 @@ public class ThriftClient {
     private static String ip = "localhost";
     private static int port = 10020;
 
-    public static class ThriftClientHandle {
-        private static ThriftClient instance = new ThriftClient(ip,port);
-    }
+//    public static class ThriftClientHandle {
+//        private static ThriftClient instance = new ThriftClient(ip,port);
+//    }
 
     private ThriftClient(String ip, int port){
         try {
@@ -67,6 +67,6 @@ public class ThriftClient {
 //        if (ThriftClientHandle.instance.transport.isOpen()) {
 //            ThriftClientHandle.instance = new ThriftClient(ip,port);
 //        }
-        return ThriftClientHandle.instance;
+        return new ThriftClient(ip,port);
     }
 }
