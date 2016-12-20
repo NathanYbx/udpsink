@@ -85,7 +85,7 @@ public class UdpSink implements MetricsSink, Closeable {
 
     @Override
     public void putMetrics(MetricsRecord record) {
-
+        LOG.debug(this.toString());
         LOG.info("Hello ALPS MONITOR" + String.valueOf(record.name()) + record.context());
         HMetrics hMetrics = new HMetrics();
         hMetrics.setTime((int)(record.timestamp()));
@@ -106,7 +106,8 @@ public class UdpSink implements MetricsSink, Closeable {
             client.put(hMetrics);
         } catch (TException e) {
             LOG.error(hMetrics.toString()  + "ERROR");
-            LOG.error(e.getMessage() );
+            LOG.error(e.getMessage() + "Error msg" );
+
             try {
                 connection(ip,port);
             } catch (TTransportException e1) {

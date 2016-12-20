@@ -40,7 +40,7 @@ public class UdpSinkTest {
             tagMap.put("SessionId","null");
             Map<String, Double> metricsMap = new HashMap<String, Double>();
             for (int j=0;j<100;j++) {
-                metricsMap.put("GcTimeMillisPS MarkSweep"+ String.valueOf(j), 0.0);
+                metricsMap.put("GcTimeMillisPS MarkSweep"+ String.valueOf(j), 0.000000000000000001);
                 //metricsMap.put("GcTimeMillisPS MarkSweep"+ String.valueOf(j), 0.0);
             }
 
