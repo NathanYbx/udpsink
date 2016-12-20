@@ -106,7 +106,11 @@ public class UdpSink implements MetricsSink, Closeable {
         try {
             LOG.info(hMetrics.toString());
             if(hMetrics !=null) {
-                thriftClient.Write(hMetrics);
+                if (thriftClient != null ) {
+                    thriftClient.Write(hMetrics);
+                }else {
+                    LOG.info(thriftClient);
+                }
             }else {
                 LOG.info("hmetrics is null");
             }
