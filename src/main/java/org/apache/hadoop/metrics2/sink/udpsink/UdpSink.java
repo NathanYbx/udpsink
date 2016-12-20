@@ -37,6 +37,8 @@ public class UdpSink implements MetricsSink, Closeable {
     //private PrintStream writer;
 //    private ThriftClient thriftClient;
 //    private SubsetConfiguration configuration;
+    private String ip ;
+    private int port;
     private String hostName ;
 
     private TTransport transport;
@@ -65,8 +67,8 @@ public class UdpSink implements MetricsSink, Closeable {
 //                    : new PrintStream(new FileOutputStream(new File(filename)),
 //                    true, "UTF-8");
             //configuration = conf;
-            String ip = conf.getString("ipaddr");
-            int port = conf.getInt("port");
+            ip = conf.getString("ipaddr");
+            port = conf.getInt("port");
             connection(ip,port);
         } catch (Exception e) {
             throw new MetricsException("Error creating "+ filename, e);
@@ -105,9 +107,19 @@ public class UdpSink implements MetricsSink, Closeable {
         } catch (TException e) {
             //LOG.info(hMetrics.toString()  + "ERROR");
             LOG.info(e.getMessage());
+            try {
+                connection(ip,port);
+            } catch (TTransportException e1) {
+                e1.printStackTrace();
+            }
             //e.printStackTrace();
         }catch (Exception e){
             LOG.info(e.getMessage());
+            try {
+                connection(ip,port);
+            } catch (TTransportException e1) {
+                e1.printStackTrace();
+            }
         }
         LOG.info("Hello ALPS MONITOR  End ====" );
     }
