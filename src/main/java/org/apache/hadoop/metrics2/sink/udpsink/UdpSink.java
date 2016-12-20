@@ -100,8 +100,6 @@ public class UdpSink implements MetricsSink, Closeable {
 
     @Override
     public void putMetrics(MetricsRecord record) {
-        LOG.debug(this.toString());
-        LOG.info("Hello ALPS MONITOR" + String.valueOf(record.name()) + record.context());
         HMetrics hMetrics = new HMetrics();
         hMetrics.setTime((int) (record.timestamp()));
         hMetrics.setHostname(hostName);
@@ -120,7 +118,6 @@ public class UdpSink implements MetricsSink, Closeable {
             metricsMap.put(metric.name(), metric.value().doubleValue());
         }
         hMetrics.setMetrics(metricsMap);
-        LOG.info(hMetrics.toString());
 
         try {
             thriftClient.Write(hMetrics);
