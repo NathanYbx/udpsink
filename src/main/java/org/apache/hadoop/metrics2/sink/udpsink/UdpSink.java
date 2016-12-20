@@ -117,20 +117,27 @@ public class UdpSink implements MetricsSink, Closeable {
         }
         hMetrics.setMetrics(metricsMap);
         LOG.info(hMetrics.toString());
+
         try {
             LOG.debug(getClient(record.name()));
-            getClient(record.name()).put(hMetrics);
-        } catch (TException e) {
-            LOG.error(hMetrics.toString() + "ERROR");
-            LOG.error(e.getMessage() + "Error msg");
-
-//            try {
-//                connection(ip, port);
-//            } catch (TTransportException e1) {
-//                e1.printStackTrace();
-//            }
-            //e.printStackTrace();
+            getClient(record.name());
+        } catch (TTransportException e) {
+            e.printStackTrace();
         }
+//        try {
+//
+//
+//        } catch (TException e) {
+//            LOG.error(hMetrics.toString() + "ERROR");
+//            LOG.error(e.getMessage() + "Error msg");
+//
+////            try {
+////                connection(ip, port);
+////            } catch (TTransportException e1) {
+////                e1.printStackTrace();
+////            }
+//            //e.printStackTrace();
+//        }
         LOG.info("Hello ALPS MONITOR  End ====");
 
     }
