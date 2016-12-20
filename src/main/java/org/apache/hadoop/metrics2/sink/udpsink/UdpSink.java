@@ -113,16 +113,16 @@ public class UdpSink implements MetricsSink, Closeable {
     @Override
     public void flush() {
 //        writer.flush();
-        try {
-            thriftClient.Flush();
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            thriftClient.Flush();
+//        } catch (TTransportException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
     public void close() throws IOException {
         //writer.close();
-        thriftClient.Close();
+//        thriftClient.Close();
     }
 }
