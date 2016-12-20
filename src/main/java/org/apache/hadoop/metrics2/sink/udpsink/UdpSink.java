@@ -102,11 +102,11 @@ public class UdpSink implements MetricsSink, Closeable {
             metricsMap.put(metric.name(), metric.value().doubleValue());
         }
         hMetrics.setMetrics(metricsMap);
-        try {
-            thriftClient.Write(hMetrics);
-        } catch (TException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            thriftClient.Write(hMetrics);
+//        } catch (TException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
