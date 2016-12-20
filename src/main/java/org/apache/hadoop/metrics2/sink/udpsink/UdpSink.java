@@ -120,7 +120,7 @@ public class UdpSink implements MetricsSink, Closeable {
         LOG.info(hMetrics.toString());
 
         try {
-            LOG.debug(getClient(record.name()));
+            LOG.info(getClient(record.name()));
             getClient(record.name()).put(hMetrics);
         } catch (TException e) {
             e.printStackTrace();
