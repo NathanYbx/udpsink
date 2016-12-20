@@ -87,35 +87,37 @@ public class UdpSink implements MetricsSink, Closeable {
     public void putMetrics(MetricsRecord record) {
         LOG.debug(this.toString());
         LOG.info("Hello ALPS MONITOR" + String.valueOf(record.name()) + record.context());
-        HMetrics hMetrics = new HMetrics();
-        hMetrics.setTime((int)(record.timestamp()));
-        hMetrics.setHostname(hostName);
-        hMetrics.setName(record.name());
-        Map<String,String> tagMap = new HashMap<String, String>();
-        for (MetricsTag tag : record.tags()) {
-            tagMap.put(tag.name(), tag.value());
-        }
-        Map<String,Double> metricsMap = new HashMap<String, Double>();
-        hMetrics.setTags(tagMap);
-        for (AbstractMetric metric : record.metrics()) {
-            metricsMap.put(metric.name(), metric.value().doubleValue());
-        }
-        hMetrics.setMetrics(metricsMap);
-        LOG.info(hMetrics.toString() );
-        try {
-            client.put(hMetrics);
-        } catch (TException e) {
-            LOG.error(hMetrics.toString()  + "ERROR");
-            LOG.error(e.getMessage() + "Error msg" );
-
-            try {
-                connection(ip,port);
-            } catch (TTransportException e1) {
-                e1.printStackTrace();
+        if(record.name() =="rpc") {
+            HMetrics hMetrics = new HMetrics();
+            hMetrics.setTime((int) (record.timestamp()));
+            hMetrics.setHostname(hostName);
+            hMetrics.setName(record.name());
+            Map<String, String> tagMap = new HashMap<String, String>();
+            for (MetricsTag tag : record.tags()) {
+                tagMap.put(tag.name(), tag.value());
             }
-            //e.printStackTrace();
+            Map<String, Double> metricsMap = new HashMap<String, Double>();
+            hMetrics.setTags(tagMap);
+            for (AbstractMetric metric : record.metrics()) {
+                metricsMap.put(metric.name(), metric.value().doubleValue());
+            }
+            hMetrics.setMetrics(metricsMap);
+            LOG.info(hMetrics.toString());
+            try {
+                client.put(hMetrics);
+            } catch (TException e) {
+                LOG.error(hMetrics.toString() + "ERROR");
+                LOG.error(e.getMessage() + "Error msg");
+
+                try {
+                    connection(ip, port);
+                } catch (TTransportException e1) {
+                    e1.printStackTrace();
+                }
+                //e.printStackTrace();
+            }
+            LOG.info("Hello ALPS MONITOR  End ====");
         }
-        LOG.info("Hello ALPS MONITOR  End ====" );
     }
 
     @Override
