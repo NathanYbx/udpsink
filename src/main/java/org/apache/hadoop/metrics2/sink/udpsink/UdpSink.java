@@ -99,6 +99,7 @@ public class UdpSink implements MetricsSink, Closeable {
             metricsMap.put(metric.name(), metric.value().doubleValue());
         }
         hMetrics.setMetrics(metricsMap);
+        LOG.info(hMetrics.toString() );
         try {
             client.put(hMetrics);
         } catch (TException e) {
