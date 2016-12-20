@@ -122,6 +122,7 @@ public class UdpSink implements MetricsSink, Closeable {
         try {
             thriftClient.Write(hMetrics);
         } catch (TException e) {
+            LOG.info(e.getMessage() + "TExecption INFO ======");
             e.printStackTrace();
         }
     }

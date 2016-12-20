@@ -39,18 +39,6 @@ public class ThriftClient {
             protocol = new TBinaryProtocol(transport);
             client = new hmetricsThrift.Client(protocol);
             transport.open();
-
-
-
-//            Map<String, String> param = new HashMap<String, String>();
-//            param.put("name", "qinerg");
-//            param.put("passwd", "123456");
-//
-//            for (int i = 0; i < 1000; i++) {
-//                System.out.println(client.funCall(System.currentTimeMillis() , "login", param));
-//            }
-
-//            transport.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
