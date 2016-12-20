@@ -74,6 +74,7 @@ public class UdpSink implements MetricsSink, Closeable {
     }
 
     private void connection(String ip,int port) throws TTransportException {
+        LOG.info("Hello connnetction ip ,port" + ip);
         transport = new TFramedTransport(new TSocket(ip, port));
         protocol = new TBinaryProtocol(transport);
         client = new hmetricsThrift.Client(protocol);
