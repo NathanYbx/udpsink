@@ -13,6 +13,9 @@ import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
+import org.codehaus.jettison.json.JSONObject;
+import org.mortbay.util.ajax.JSON;
+
 
 import java.sql.Time;
 import java.util.HashMap;
@@ -32,6 +35,15 @@ public class UdpSinkTest {
 //        Thread.currentThread().sleep(timea);
         for (int i=0; i<1000 ; i++ ){
             HMetrics hMetrics = new HMetrics();
+            hMetrics.setName("JvmMetrics");
+            Map<String, String> tagMap = new HashMap<String, String>();
+            tagMap.put("SessionId","null");
+            Map<String, Double> metricsMap = new HashMap<String, Double>();
+            metricsMap.put("GcTimeMillisPS MarkSweep",0.0);
+            hMetrics.setTags(tagMap);
+            hMetrics.setMetrics(metricsMap);
+//            lingshu-cdn-cc03-data03, tags:{SessionId=null, Context=jvm, ProcessName=DataNode, Hostname=bj-lingshu-cdn-cc03-data03}, metrics:{ThreadsTerminated=0.0, LogError=0.0, GcCount=8.0, LogFatal=0.0, GcCountPS Scavenge=8.0, GcTimeMillis=497.0, LogWarn=45.0, GcCountPS MarkSweep=0.0, ThreadsBlocked=0.0, GcNumWarnThresholdExceeded=0.0, MemHeapCommittedM=9457.0, GcTotalExtraSleepTime=0.0, MemNonHeapUsedM=22.486526489257812, ThreadsRunnable=18.0, GcTimeMillisPS Scavenge=497.0, GcTimeMillisPS MarkSweep=0.0, MemNonHeapCommittedM=23.4375, MemHeapMaxM=40000.0, LogInfo=148.0, ThreadsNew=0.0, MemHeapUsedM=3832.975341796875, GcNumInfoThresholdExceeded=0.0, ThreadsWaiting=6.0, MemMaxM=40000.0, MemNonHeapMaxM=130.0, ThreadsTimedWaiting=85.0}}")
+
 //            hMetrics.setTime((int) (1300000000));
 //            hMetrics.setHostname("test");
 //            hMetrics.setName("testname");
