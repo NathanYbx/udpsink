@@ -59,7 +59,8 @@ public class ThriftClient {
     public void Write(HMetrics hMetrics) throws TException {
         if (client != null) {
             System.out.println(client);
-            client.put(hMetrics);
+            LOG.info(client );
+            //client.put(hMetrics);
         }else{
             LOG.info("Client is Null");
         }
