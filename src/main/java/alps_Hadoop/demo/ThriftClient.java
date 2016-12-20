@@ -18,6 +18,7 @@ public class ThriftClient {
 
     private TTransport transport;
     private hmetricsThrift.Client client;
+    private TBinaryProtocol protocol;
     private static String ip = "localhost";
     private static int port = 10020;
 
@@ -27,13 +28,16 @@ public class ThriftClient {
 
     private ThriftClient(String ip, int port){
         try {
-            transport = new TFramedTransport(new TSocket(ip, port));
-
-            TBinaryProtocol protocol = new TBinaryProtocol(transport);
+            System.out.println("Hello transport");
+           // new TFramedTransport.Factory(transport)
             //TCompactProtocol protocol = new TCompactProtocol(transport);
 
+            transport = new TFramedTransport(new TSocket(ip, port));
+            protocol = new TBinaryProtocol(transport);
             client = new hmetricsThrift.Client(protocol);
             transport.open();
+
+
 
 //            Map<String, String> param = new HashMap<String, String>();
 //            param.put("name", "qinerg");
@@ -50,29 +54,25 @@ public class ThriftClient {
     }
 
     public void Write(HMetrics hMetrics) throws TException {
-        if (transport.isOpen()) {
-            client.put(hMetrics);
-        }else{
-            //ThriftClientHandle.instance = new ThriftClient(ThriftClientHandle.ip,ThriftClientHandle.port);
-
-        }
+        System.out.println(client);
+        client.put(hMetrics);
     }
 
     public void Flush() throws TTransportException {
-        transport.flush();
+        //transport.flush();
     }
 
     public void Close() {
-        transport.close();
+        //transport.close();
     }
 
     public static ThriftClient getInstance(String sip,int sport) {
         //其实这里写的非常不好
         ip = sip ;
         port = sport;
-        if (ThriftClientHandle.instance.transport.isOpen()) {
-            ThriftClientHandle.instance = new ThriftClient(ip,port);
-        }
+//        if (ThriftClientHandle.instance.transport.isOpen()) {
+//            ThriftClientHandle.instance = new ThriftClient(ip,port);
+//        }
         return ThriftClientHandle.instance;
     }
 }
