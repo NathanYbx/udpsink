@@ -65,6 +65,7 @@ public class UdpSink implements MetricsSink, Closeable {
 
     @Override
     public void putMetrics(MetricsRecord record) {
+
         LOG.info("Hello ALPS MONITOR" + String.valueOf(record.timestamp()));
         LOG.info(thriftClient.toString() + "==================");
 //        JSONObject jsonObj = new JSONObject();
@@ -104,7 +105,11 @@ public class UdpSink implements MetricsSink, Closeable {
         hMetrics.setMetrics(metricsMap);
         try {
             LOG.info(hMetrics.toString());
-            thriftClient.Write(hMetrics);
+            if(hMetrics !=null) {
+                thriftClient.Write(hMetrics);
+            }else {
+                LOG.info("hmetrics is null");
+            }
         } catch (TException e) {
             e.printStackTrace();
         }
