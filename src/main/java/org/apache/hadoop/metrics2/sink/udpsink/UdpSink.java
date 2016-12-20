@@ -35,8 +35,8 @@ public class UdpSink implements MetricsSink, Closeable {
     private static final Log LOG = LogFactory.getLog(UdpSink.class);
     private static final String FILENAME_KEY = "filename";
     //private PrintStream writer;
-    private ThriftClient thriftClient;
-    private SubsetConfiguration configuration;
+//    private ThriftClient thriftClient;
+//    private SubsetConfiguration configuration;
     private String hostName ;
 
     private TTransport transport;
@@ -65,8 +65,8 @@ public class UdpSink implements MetricsSink, Closeable {
 //                    : new PrintStream(new FileOutputStream(new File(filename)),
 //                    true, "UTF-8");
             //configuration = conf;
-            String ip = configuration.getString("ipaddr");
-            int port = configuration.getInt("port");
+            String ip = conf.getString("ipaddr");
+            int port = conf.getInt("port");
             connection(ip,port);
         } catch (Exception e) {
             throw new MetricsException("Error creating "+ filename, e);
