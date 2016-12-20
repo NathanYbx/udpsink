@@ -31,6 +31,7 @@ public class UdpSink implements MetricsSink, Closeable {
     private static final String FILENAME_KEY = "filename";
     //private PrintStream writer;
     private ThriftClient thriftClient;
+    private SubsetConfiguration configuration;
     private String hostName ;
 
     @Override
@@ -54,10 +55,7 @@ public class UdpSink implements MetricsSink, Closeable {
 //            writer = filename == null ? System.out
 //                    : new PrintStream(new FileOutputStream(new File(filename)),
 //                    true, "UTF-8");
-            String ip = conf.getString("ipaddr");
-            int port = conf.getInt("port");
-            thriftClient = ThriftClient.getInstance(ip,port);
-            LOG.info(thriftClient.toString());
+            configuration = conf;
         } catch (Exception e) {
             throw new MetricsException("Error creating "+ filename, e);
         }
@@ -67,7 +65,6 @@ public class UdpSink implements MetricsSink, Closeable {
     public void putMetrics(MetricsRecord record) {
 
         LOG.info("Hello ALPS MONITOR" + String.valueOf(record.timestamp()));
-        LOG.info(thriftClient.toString() + "==================");
 //        JSONObject jsonObj = new JSONObject();
 //        JSONObject tagObj  = new JSONObject();
 //        JSONObject valueObj = new JSONObject();
@@ -106,6 +103,10 @@ public class UdpSink implements MetricsSink, Closeable {
         try {
             LOG.info(hMetrics.toString());
             if(hMetrics !=null) {
+                String ip = configuration.getString("ipaddr");
+                int port = configuration.getInt("port");
+                thriftClient = ThriftClient.getInstance(ip,port);
+                LOG.info(thriftClient.toString());
                 if (thriftClient != null ) {
                     LOG.info("Hello ALPS MONITOR 8888888888888888");
                     thriftClient.Write(hMetrics);
@@ -132,7 +133,10 @@ public class UdpSink implements MetricsSink, Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close()
+
+
+    {
         //writer.close();
 //        thriftClient.Close();
     }
