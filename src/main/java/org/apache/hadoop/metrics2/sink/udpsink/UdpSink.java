@@ -51,6 +51,7 @@ public class UdpSink implements MetricsSink, Closeable {
     public void init(SubsetConfiguration conf) {
         LOG.info("Hello ALPS Thrift MONITOR");
         hostName = "ALPS_DEFAULT_HOST";
+        clientPool = new HashMap<String, hmetricsThrift.Client>();
         if (conf.getString("slave.host.name") != null) {
             hostName = conf.getString("slave.host.name");
         } else {
