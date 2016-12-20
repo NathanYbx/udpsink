@@ -35,7 +35,7 @@ public class UdpSink implements MetricsSink, Closeable {
     private static final Log LOG = LogFactory.getLog(UdpSink.class);
     private static final String FILENAME_KEY = "filename";
     //private PrintStream writer;
-//    private ThriftClient thriftClient;
+    private ThriftClient thriftClient;
 //    private SubsetConfiguration configuration;
     private String ip ;
     private int port;
@@ -72,32 +72,31 @@ public class UdpSink implements MetricsSink, Closeable {
             //configuration = conf;
             ip = conf.getString("ipaddr");
             port = conf.getInt("port");
-            connection(ip,port);
+            thriftClient = ThriftClient.getInstance(ip,port);
         } catch (Exception e) {
             throw new MetricsException("Error creating "+ filename, e);
         }
     }
 
-    private void connection(String ip,int port)   throws TTransportException {
-        LOG.info("Hello connnetction ip ,port" + ip);
-        transport = new TFramedTransport(new TSocket(ip, port));
-        protocol = new TBinaryProtocol(transport);
-        client = new hmetricsThrift.Client(protocol);
-        transport.open();
-    }
+//    private void connection(String ip,int port)   throws TTransportException {
+//        transport = new TFramedTransport(new TSocket(ip, port));
+//        protocol = new TBinaryProtocol(transport);
+//        client = new hmetricsThrift.Client(protocol);
+//        transport.open();
+//    }
 
-    private hmetricsThrift.Client getClient(String name) throws TTransportException {
-
-        if (clientPool.containsKey(name)){
-            return clientPool.get(name);
-        }
-        TTransport transport = new TFramedTransport(new TSocket(ip, port));
-        TBinaryProtocol protocol = new TBinaryProtocol(transport);
-        hmetricsThrift.Client client = new hmetricsThrift.Client(protocol);
-        transport.open();
-        clientPool.put(name,client);
-        return client;
-    }
+//    private hmetricsThrift.Client getClient(String name) throws TTransportException {
+//
+//        if (clientPool.containsKey(name)){
+//            return clientPool.get(name);
+//        }
+//        TTransport transport = new TFramedTransport(new TSocket(ip, port));
+//        TBinaryProtocol protocol = new TBinaryProtocol(transport);
+//        hmetricsThrift.Client client = new hmetricsThrift.Client(protocol);
+//        transport.open();
+//        clientPool.put(name,client);
+//        return client;
+//    }
 
     @Override
     public void putMetrics(MetricsRecord record) {
@@ -112,7 +111,7 @@ public class UdpSink implements MetricsSink, Closeable {
             if (tag.value() != null) {
                 tagMap.put(tag.name(), tag.value());
             }else{
-                tagMap.put(tag.name(), "Fuck You！");
+                tagMap.put(tag.name(), "");
             }
         }
         Map<String, Double> metricsMap = new HashMap<String, Double>();
@@ -124,45 +123,17 @@ public class UdpSink implements MetricsSink, Closeable {
         LOG.info(hMetrics.toString());
 
         try {
-            LOG.info(getClient(record.name()));
-            getClient(record.name()).put(hMetrics);
+            thriftClient.Write(hMetrics);
         } catch (TException e) {
             e.printStackTrace();
         }
-//        try {
-//
-//
-//        } catch (TException e) {
-//            LOG.error(hMetrics.toString() + "ERROR");
-//            LOG.error(e.getMessage() + "Error msg");
-//
-////            try {
-////                connection(ip, port);
-////            } catch (TTransportException e1) {
-////                e1.printStackTrace();
-////            }
-//            //e.printStackTrace();
-//        }
-        LOG.info("Hello ALPS MONITOR  End ====");
-
     }
 
     @Override
     public void flush() {
-//        writer.flush();
-//        try {
-//            thriftClient.Flush();
-//        } catch (TTransportException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override
-    public void close()
-
-
-    {
-        //writer.close();
-//        thriftClient.Close();
+    public void close() {
     }
 }
