@@ -105,21 +105,14 @@ public class UdpSink implements MetricsSink, Closeable {
         try {
             client.put(hMetrics);
         } catch (TException e) {
-            //LOG.info(hMetrics.toString()  + "ERROR");
-            LOG.info(e.getMessage());
+            LOG.error(hMetrics.toString()  + "ERROR");
+            LOG.error(e.getMessage() );
             try {
                 connection(ip,port);
             } catch (TTransportException e1) {
                 e1.printStackTrace();
             }
             //e.printStackTrace();
-        }catch (Exception e){
-            LOG.info(e.getMessage());
-            try {
-                connection(ip,port);
-            } catch (TTransportException e1) {
-                e1.printStackTrace();
-            }
         }
         LOG.info("Hello ALPS MONITOR  End ====" );
     }
