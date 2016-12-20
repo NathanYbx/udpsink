@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="org.apache.hadoop.metrics2.sink.udpsink.AppTest" time="0.019" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="org.apache.hadoop.metrics2.sink.udpsink.AppTest" time="0.028" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2016.2.5"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -12,7 +12,7 @@
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
     <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
     <property name="file.encoding.pkg" value="sun.io"/>
-    <property name="idea.launcher.port" value="7536"/>
+    <property name="idea.launcher.port" value="7532"/>
     <property name="user.country" value="CN"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="unknown"/>
@@ -25,6 +25,7 @@
     <property name="java.io.tmpdir" value="/var/folders/ny/2zzbrl05637fvqs8vrjz581w0000gn/T/"/>
     <property name="line.separator" value="
 "/>
+    <property name="socksProxyPort" value="1080"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="os.name" value="Mac OS X"/>
     <property name="classworlds.conf" value="/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3/bin/m2.conf"/>
@@ -42,6 +43,7 @@
     <property name="file.encoding" value="UTF-8"/>
     <property name="user.name" value="yubangxu"/>
     <property name="java.class.path" value="/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3/boot/plexus-classworlds-2.4.jar:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar"/>
+    <property name="socksProxyHost" value="127.0.0.1"/>
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_111.jdk/Contents/Home/jre"/>
@@ -61,5 +63,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="org.apache.hadoop.metrics2.sink.udpsink.AppTest" name="testApp" time="0.001"/>
+  <testcase classname="org.apache.hadoop.metrics2.sink.udpsink.AppTest" name="testApp" time="0.003"/>
 </testsuite>

@@ -107,6 +107,7 @@ public class UdpSink implements MetricsSink, Closeable {
             LOG.info(hMetrics.toString());
             if(hMetrics !=null) {
                 if (thriftClient != null ) {
+                    LOG.info("Hello ALPS MONITOR 8888888888888888");
                     thriftClient.Write(hMetrics);
                 }else {
                     LOG.info(thriftClient);

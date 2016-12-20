@@ -28,19 +28,19 @@ public class UdpSinkTest {
 
         System.out.println("Hello Thrift");
         ThriftClient thriftClient = ThriftClient.getInstance("10.75.136.105",10020);
-        long timea = 30000 ;
-        Thread.currentThread().sleep(timea);
+//        long timea = 30000 ;
+//        Thread.currentThread().sleep(timea);
         for (int i=0; i<1000 ; i++ ){
             HMetrics hMetrics = new HMetrics();
-            hMetrics.setTime((int) (1300000000));
-            hMetrics.setHostname("test");
-            hMetrics.setName("testname");
-            Map<String, String> tagMap = new HashMap<String, String>();
-            tagMap.put("k1", "v1");
-            Map<String, Double> metricsMap = new HashMap<String, Double>();
-            hMetrics.setTags(tagMap);
-            metricsMap.put("m1", (double) (0.11));
-            hMetrics.setMetrics(metricsMap);
+//            hMetrics.setTime((int) (1300000000));
+//            hMetrics.setHostname("test");
+//            hMetrics.setName("testname");
+//            Map<String, String> tagMap = new HashMap<String, String>();
+//            tagMap.put("k1", "v1");
+//            Map<String, Double> metricsMap = new HashMap<String, Double>();
+//            hMetrics.setTags(tagMap);
+//            metricsMap.put("m1", (double) (0.11));
+//            hMetrics.setMetrics(metricsMap);
 
             thriftClient.Write(hMetrics);
         }
