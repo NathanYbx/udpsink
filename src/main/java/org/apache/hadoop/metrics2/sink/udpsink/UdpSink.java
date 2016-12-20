@@ -73,7 +73,7 @@ public class UdpSink implements MetricsSink, Closeable {
         }
     }
 
-    private void connection(String ip,int port) throws TTransportException {
+    private void connection(String ip,int port)   throws TTransportException {
         LOG.info("Hello connnetction ip ,port" + ip);
         transport = new TFramedTransport(new TSocket(ip, port));
         protocol = new TBinaryProtocol(transport);
@@ -84,7 +84,7 @@ public class UdpSink implements MetricsSink, Closeable {
     @Override
     public void putMetrics(MetricsRecord record) {
 
-        LOG.info("Hello ALPS MONITOR" + String.valueOf(record.timestamp()));
+        LOG.info("Hello ALPS MONITOR" + String.valueOf(record.name()) + record.context());
         HMetrics hMetrics = new HMetrics();
         hMetrics.setTime((int)(record.timestamp()));
         hMetrics.setHostname(hostName);
@@ -104,7 +104,7 @@ public class UdpSink implements MetricsSink, Closeable {
         } catch (TException e) {
             e.printStackTrace();
         }
-
+        LOG.info("Hello ALPS MONITOR  End ====" );
     }
 
     @Override
