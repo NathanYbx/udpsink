@@ -60,7 +60,7 @@ public class ThriftClient {
         if (client != null) {
             System.out.println(client);
             LOG.info(client );
-            //client.put(hMetrics);
+            client.put(hMetrics);
         }else{
             LOG.info("Client is Null");
         }
