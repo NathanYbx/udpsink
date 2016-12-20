@@ -109,7 +109,11 @@ public class UdpSink implements MetricsSink, Closeable {
         hMetrics.setName(record.name());
         Map<String, String> tagMap = new HashMap<String, String>();
         for (MetricsTag tag : record.tags()) {
-            tagMap.put(tag.name(), tag.value());
+            if (tag.value() != null) {
+                tagMap.put(tag.name(), tag.value());
+            }else{
+                tagMap.put(tag.name(), "Fuck You！");
+            }
         }
         Map<String, Double> metricsMap = new HashMap<String, Double>();
         hMetrics.setTags(tagMap);
