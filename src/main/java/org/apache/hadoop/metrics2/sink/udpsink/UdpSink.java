@@ -105,10 +105,11 @@ public class UdpSink implements MetricsSink, Closeable {
             if(hMetrics !=null) {
                 String ip = configuration.getString("ipaddr");
                 int port = configuration.getInt("port");
-                thriftClient = ThriftClient.getInstance(ip,port);
+                LOG.info("Hello ALPS MONITOR 8888888888888888" + ip + "===" + port);
+                ThriftClient thriftClient = ThriftClient.getInstance(ip,port);
                 LOG.info(thriftClient.toString());
                 if (thriftClient != null ) {
-                    LOG.info("Hello ALPS MONITOR 8888888888888888");
+
                     thriftClient.Write(hMetrics);
                 }else {
                     LOG.info(thriftClient);
