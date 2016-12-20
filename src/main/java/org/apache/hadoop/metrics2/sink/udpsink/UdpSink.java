@@ -118,6 +118,7 @@ public class UdpSink implements MetricsSink, Closeable {
         hMetrics.setMetrics(metricsMap);
         LOG.info(hMetrics.toString());
         try {
+            LOG.debug(getClient(record.name()));
             getClient(record.name()).put(hMetrics);
         } catch (TException e) {
             LOG.error(hMetrics.toString() + "ERROR");
