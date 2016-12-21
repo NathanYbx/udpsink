@@ -101,7 +101,7 @@ public class UdpSink implements MetricsSink, Closeable {
     @Override
     public void putMetrics(MetricsRecord record) {
         HMetrics hMetrics = new HMetrics();
-        hMetrics.setTime((int) (record.timestamp()));
+        hMetrics.setTime(record.timestamp());
         hMetrics.setHostname(hostName);
         hMetrics.setName(record.name());
         Map<String, String> tagMap = new HashMap<String, String>();
