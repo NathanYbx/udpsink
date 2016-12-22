@@ -72,6 +72,7 @@ public class UdpSink implements MetricsSink, Closeable {
             configuration = conf;
             ip = conf.getString("ipaddr");
             port = conf.getInt("port");
+
             thriftClient = ThriftClient.getInstance(ip,port);
         } catch (Exception e) {
             throw new MetricsException("Error creating "+ filename, e);
@@ -102,7 +103,7 @@ public class UdpSink implements MetricsSink, Closeable {
     public void putMetrics(MetricsRecord record) {
         HMetrics hMetrics = new HMetrics();
         hMetrics.setTime(record.timestamp());
-        hMetrics.setPrefix(record.description());
+        hMetrics.setPrefix(configuration.getString("process"));
         hMetrics.setHostname(hostName);
         hMetrics.setName(record.name());
         Map<String, String> tagMap = new HashMap<String, String>();
