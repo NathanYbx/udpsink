@@ -36,7 +36,7 @@ public class UdpSink implements MetricsSink, Closeable {
     private static final String FILENAME_KEY = "filename";
     //private PrintStream writer;
     private ThriftClient thriftClient;
-//    private SubsetConfiguration configuration;
+    private SubsetConfiguration configuration;
     private String ip ;
     private int port;
     private String hostName ;
@@ -69,7 +69,7 @@ public class UdpSink implements MetricsSink, Closeable {
 //            writer = filename == null ? System.out
 //                    : new PrintStream(new FileOutputStream(new File(filename)),
 //                    true, "UTF-8");
-            //configuration = conf;
+            configuration = conf;
             ip = conf.getString("ipaddr");
             port = conf.getInt("port");
             thriftClient = ThriftClient.getInstance(ip,port);
@@ -102,6 +102,7 @@ public class UdpSink implements MetricsSink, Closeable {
     public void putMetrics(MetricsRecord record) {
         HMetrics hMetrics = new HMetrics();
         hMetrics.setTime(record.timestamp());
+        hMetrics.setPrefix(configuration.getPrefix());
         hMetrics.setHostname(hostName);
         hMetrics.setName(record.name());
         Map<String, String> tagMap = new HashMap<String, String>();
