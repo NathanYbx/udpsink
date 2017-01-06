@@ -31,7 +31,7 @@ public class ThriftClient {
 
     private ThriftClient(String ip, int port){
         try {
-            System.out.println("Hello transport");
+            System.out.println("Hello transport1");
            // new TFramedTransport.Factory(transport)
             //TCompactProtocol protocol = new TCompactProtocol(transport);
 
