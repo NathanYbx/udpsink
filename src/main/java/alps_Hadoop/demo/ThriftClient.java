@@ -40,12 +40,14 @@ public class ThriftClient {
             client = new hmetricsThrift.Client(protocol);
             transport.open();
         } catch (Exception e) {
+            System.out.println(e.getMessage() + "ERRRRRRRRRRRRRR");
             e.printStackTrace();
         }
     }
 
     public void Write(HMetrics hMetrics) throws TException {
         if (client != null) {
+
             client.put(hMetrics);
         }else{
             LOG.info("Client is Null");
