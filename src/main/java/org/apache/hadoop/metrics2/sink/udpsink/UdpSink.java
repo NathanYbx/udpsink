@@ -62,6 +62,7 @@ public class UdpSink implements MetricsSink, Closeable {
                         conf.getString("dfs.datanode.dns.interface", "default"),
                         conf.getString("dfs.datanode.dns.nameserver", "default"));
                 hostIP = DNS.getDefaultIP(conf.getString("dfs.datanode.dns.interface", "default"));
+                LOG.info(hostIP + "=================");
             } catch (UnknownHostException uhe) {
                 LOG.error(uhe);
                 hostName = "UNKNOWN.example.com";

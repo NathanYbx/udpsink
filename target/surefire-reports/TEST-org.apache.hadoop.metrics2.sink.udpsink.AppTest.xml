@@ -61,5 +61,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="org.apache.hadoop.metrics2.sink.udpsink.AppTest" name="testApp" time="0.001"/>
+  <testcase classname="org.apache.hadoop.metrics2.sink.udpsink.AppTest" name="testApp" time="0.002"/>
 </testsuite>
