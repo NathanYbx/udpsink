@@ -113,7 +113,7 @@ public class UdpSink implements MetricsSink, Closeable {
         hMetrics.setHostname(hostIP);
         hMetrics.setName(record.name());
         Map<String, String> tagMap = new HashMap<String, String>();
-        tagMap.put("hostname",hostName);
+        tagMap.put("host_name",hostName);
         for (MetricsTag tag : record.tags()) {
             if (tag.value() != null) {
                 tagMap.put(tag.name(), tag.value());
@@ -131,7 +131,6 @@ public class UdpSink implements MetricsSink, Closeable {
         try {
             LOG.info("hMetrics" + hMetrics.getHostname());
             thriftClient.Write(hMetrics);
-
         } catch (TException e) {
             thriftClient = ThriftClient.getInstance(ip,port);
             LOG.info(e.getMessage() + "TExecption INFO ======");
