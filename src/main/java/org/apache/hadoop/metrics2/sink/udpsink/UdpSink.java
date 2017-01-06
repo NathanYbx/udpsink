@@ -40,6 +40,7 @@ public class UdpSink implements MetricsSink, Closeable {
     private String ip ;
     private int port;
     private String hostName ;
+    private String hostIP ;
 
     private TTransport transport;
     private hmetricsThrift.Client client;
@@ -51,6 +52,7 @@ public class UdpSink implements MetricsSink, Closeable {
     public void init(SubsetConfiguration conf) {
         LOG.info("Hello ALPS Thrift MONITOR");
         hostName = "ALPS_DEFAULT_HOST";
+        hostIP = "0.0.0.0";
         clientPool = new HashMap<String, hmetricsThrift.Client>();
         if (conf.getString("slave.host.name") != null) {
             hostName = conf.getString("slave.host.name");
@@ -59,9 +61,11 @@ public class UdpSink implements MetricsSink, Closeable {
                 hostName = DNS.getDefaultHost(
                         conf.getString("dfs.datanode.dns.interface", "default"),
                         conf.getString("dfs.datanode.dns.nameserver", "default"));
+                hostIP = DNS.getDefaultIP(conf.getString("dfs.datanode.dns.interface", "default"));
             } catch (UnknownHostException uhe) {
                 LOG.error(uhe);
                 hostName = "UNKNOWN.example.com";
+                hostIP = "0.0.0.1";
             }
         }
         String filename = conf.getString(FILENAME_KEY);
@@ -104,9 +108,10 @@ public class UdpSink implements MetricsSink, Closeable {
         HMetrics hMetrics = new HMetrics();
         hMetrics.setTime(record.timestamp());
         hMetrics.setPrefix(configuration.getString("process"));
-        hMetrics.setHostname(hostName);
+        hMetrics.setHostname(hostIP);
         hMetrics.setName(record.name());
         Map<String, String> tagMap = new HashMap<String, String>();
+        tagMap.put("hostname",hostName);
         for (MetricsTag tag : record.tags()) {
             if (tag.value() != null) {
                 tagMap.put(tag.name(), tag.value());
@@ -122,6 +127,7 @@ public class UdpSink implements MetricsSink, Closeable {
         hMetrics.setMetrics(metricsMap);
 
         try {
+            LOG.info("hMetrics" + hMetrics.getHostname());
             thriftClient.Write(hMetrics);
         } catch (TException e) {
             thriftClient = ThriftClient.getInstance(ip,port);
