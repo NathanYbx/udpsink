@@ -130,6 +130,7 @@ public class UdpSink implements MetricsSink, Closeable {
         try {
             LOG.info("hMetrics" + hMetrics.getHostname());
             thriftClient.Write(hMetrics);
+            LOG.info(hMetrics.toString() + "==================");
         } catch (TException e) {
             thriftClient = ThriftClient.getInstance(ip,port);
             LOG.info(e.getMessage() + "TExecption INFO ======");
