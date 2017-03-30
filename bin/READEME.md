@@ -12,11 +12,11 @@
     *.sink.udpsink.class=org.apache.hadoop.metrics2.sink.udpsink.UdpSink
     
     nodemanager.sink.udpsink.process=nodemanager
-    nodemanager.sink.udpsink.ipaddr=10.75.136.105
+    nodemanager.sink.udpsink.ipaddr=X.x.x.x
     nodemanager.sink.udpsink.port=10020
     
     datanode.sink.udpsink.process=datanode
-    datanode.sink.udpsink.ipaddr=10.75.136.105
+    datanode.sink.udpsink.ipaddr=X.x.x.x
     datanode.sink.udpsink.port=10020
     
     *.period=10

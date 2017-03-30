@@ -106,7 +106,6 @@ public class UdpSink implements MetricsSink, Closeable {
 
     @Override
     public void putMetrics(MetricsRecord record) {
-        LOG.info(hostIP + "==================");
         HMetrics hMetrics = new HMetrics();
         hMetrics.setTime(record.timestamp());
         hMetrics.setPrefix(configuration.getString("process"));
@@ -129,8 +128,6 @@ public class UdpSink implements MetricsSink, Closeable {
         hMetrics.setMetrics(metricsMap);
 
         try {
-            LOG.info("hMetrics" + hMetrics.getHostname());
-
             thriftClient.Write(hMetrics);
         } catch (TException e) {
             thriftClient = ThriftClient.getInstance(ip,port);
